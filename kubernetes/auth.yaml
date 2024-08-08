@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: auth-server-deployment
+  labels:
+    app: auth-server
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      steamscraper.io/name: auth-server
+  template:
+    metadata:
+      labels:
+        steamscraper.io/name: auth-server
+    spec:
+      containers:
+      - name: auth-server
+        image: node:18
+        ports:
+        - containerPort: 3000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: auth-service
+spec:
+  selector:
+    app: auth
+  ports:
+    - protocol: TCP
+      port: 443
+      targetPort: 3000
