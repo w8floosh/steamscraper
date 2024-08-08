@@ -20,7 +20,7 @@ ARG certname=steamscraper
 COPY --from=CLIENT_BUILD /usr/src/app/client/dist/. /usr/share/nginx/html/
 COPY --from=CLIENT_BUILD /usr/src/app/client/nginx.conf /etc/nginx/conf.d/default.conf
 
-COPY --from=CLIENT_BUILD /usr/src/app/client/src/certificates/. /etc/ssl/certs
+COPY --from=CLIENT_BUILD /usr/src/app/client/certificates/. /etc/ssl/certs
 
 RUN find /etc/ssl/certs -name "${certname}*" -exec chmod 750 {} + && chown -R nginx:nginx /usr/share/nginx/html
 

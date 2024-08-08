@@ -18,7 +18,7 @@ jobs:
                 uses: appleboy/docker-ecr-action@master
                 with:
                     access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
-                    secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+                    secret_key: ${{ secrets.AWS_SESSION_TOKEN }}
                     registry: ${{ secrets.ECR_URI }}
                     repo: ${{ env.ECR_REPOSITORY }}
                     region: ${{ env.AWS_REGION }}
@@ -31,7 +31,7 @@ jobs:
                 uses: appleboy/docker-ecr-action@master
                 with:
                     access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
-                    secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+                    secret_key: ${{ secrets.AWS_SESSION_TOKEN }}
                     registry: ${{ secrets.ECR_URI }}
                     repo: ${{ env.ECR_REPOSITORY }}
                     region: ${{ env.AWS_REGION }}
@@ -44,7 +44,7 @@ jobs:
                 uses: appleboy/docker-ecr-action@master
                 with:
                     access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
-                    secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+                    secret_key: ${{ secrets.AWS_SESSION_TOKEN }}
                     registry: ${{ secrets.ECR_URI }}
                     repo: ${{ env.ECR_REPOSITORY }}
                     region: ${{ env.AWS_REGION }}
@@ -70,7 +70,7 @@ jobs:
                 uses: appleboy/docker-ecr-action@master
                 with:
                     access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
-                    secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+                    secret_key: ${{ secrets.AWS_SESSION_TOKEN }}
                     registry: ${{ secrets.ECR_URI }}
                     repo: ${{ env.ECR_REPOSITORY }}
                     region: ${{ env.AWS_REGION }}
