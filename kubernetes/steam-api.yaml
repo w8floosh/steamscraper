@@ -1,16 +1,16 @@
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
-  name: steamapi
+  name: steamapi-statefulset
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: steamapi
+      steamscraper.io/name: steamapi
   template:
     metadata:
       labels:
-        app: steamapi
+        steamscraper.io/name: steamapi
     spec:
       containers:
       - name: steamapi
@@ -22,16 +22,23 @@ spec:
           value: redis
         - name: REDIS_PORT
           value: "6379"
+        - name: STEAMAPI_CG
+          value: STEAMAPI_CG
+        - name: REDIS_REQUEST_TIMEOUT
+          value: 3000
+        - name: REDIS_RESPONSE_TIMEOUT
+          value: 3000
 
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: steamapi-service
+  name: steamapi-cache-service
 spec:
   selector:
-    app.kubernetes.io/name: 
+    matchLabels:
+      steamscraper.io/name: redis-server
   ports:
     - protocol: TCP
-      port: 8000
-      targetPort: 8000
+      port: 443
+      targetPort: 6379

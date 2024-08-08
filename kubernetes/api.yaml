@@ -24,3 +24,16 @@ spec:
           value: "6379"
         - name: BACKEND_CG
         - value: BACKEND_CG
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend-message-broker-service
+spec:
+  selector:
+    matchLabels:
+      steamscraper.io/name: redis-server
+  ports:
+    - protocol: TCP
+      port: 3001
+      targetPort: 6379
