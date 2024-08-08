@@ -1,0 +1,35 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: main-ingress
+  annotations: 
+    nginx.ingress.kubernetes.io/auth-signin:  https://$host/api/auth/login?$query_string
+    nginx.ingress.kubernetes.io/auth-url: https://$host/api/auth/oauth/token
+    nginx.ingress.kubernetes.io/proxy-buffer-size: 512k
+spec:
+  rules:
+  - host: steamscraper.io
+    http:
+      paths:
+      - path: /client
+        pathType: Prefix
+        backend:
+          service:
+            name: client-service
+            port:
+              number: 443
+      - path: /auth
+        pathType: Prefix
+        backend:
+          service:
+            name: auth-service
+            port:
+              number: 3000
+      - path: /api
+        pathType: Prefix
+        backend:
+          service:
+            name: steamapi-service
+            port:
+              number: 8000
+

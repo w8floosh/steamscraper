@@ -1,0 +1,85 @@
+name: CI/CD pipeline
+on: workflow_dispatch
+env:
+    AWS_REGION: us-east-1
+    ECR_REPOSITORY: steamscraper
+    EKS_CLUSTER: steamscraper-eks
+
+jobs:
+    
+    build_publish:
+        # needs: Testing
+        runs-on: ubuntu-latest
+        steps:
+            -   name: Code checkout
+                uses: actions/checkout@v4  
+
+            -   name: Build & Upload backend server image to ECR
+                uses: appleboy/docker-ecr-action@master
+                with:
+                    access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
+                    secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+                    registry: ${{ secrets.ECR_URI }}
+                    repo: ${{ env.ECR_REPOSITORY }}
+                    region: ${{ env.AWS_REGION }}
+                    tags: latest,${{ github.run_number }}
+                    daemon_off: false
+                    dockerfile: ./api/Dockerfile
+                    context: ./
+
+            -   name: Build & Upload Steam API proxy image to ECR
+                uses: appleboy/docker-ecr-action@master
+                with:
+                    access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
+                    secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+                    registry: ${{ secrets.ECR_URI }}
+                    repo: ${{ env.ECR_REPOSITORY }}
+                    region: ${{ env.AWS_REGION }}
+                    tags: latest,${{ github.run_number }}
+                    daemon_off: false
+                    dockerfile: ./steamapi/Dockerfile
+                    context: ./
+
+            -   name: Build & Upload web server image to ECR
+                uses: appleboy/docker-ecr-action@master
+                with:
+                    access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
+                    secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+                    registry: ${{ secrets.ECR_URI }}
+                    repo: ${{ env.ECR_REPOSITORY }}
+                    region: ${{ env.AWS_REGION }}
+                    tags: latest,${{ github.run_number }}
+                    daemon_off: false
+                    dockerfile: ./client/Dockerfile
+                    context: ./
+            
+            -   name: Build & Upload auth server image to ECR
+                uses: appleboy/docker-ecr-action@master
+                with:
+                    access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
+                    secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+                    registry: ${{ secrets.ECR_URI }}
+                    repo: ${{ env.ECR_REPOSITORY }}
+                    region: ${{ env.AWS_REGION }}
+                    tags: latest,${{ github.run_number }}
+                    daemon_off: false
+                    dockerfile: ./auth/Dockerfile
+                    context: ./
+
+            -   name: Build & Upload Redis server image to ECR
+                uses: appleboy/docker-ecr-action@master
+                with:
+                    access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
+                    secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+                    registry: ${{ secrets.ECR_URI }}
+                    repo: ${{ env.ECR_REPOSITORY }}
+                    region: ${{ env.AWS_REGION }}
+                    tags: latest,${{ github.run_number }}
+                    daemon_off: false
+                    dockerfile: ./redis/Dockerfile
+                    context: ./
+    # Testing:
+    #     runs-on: ubuntu-latest
+    #     steps:
+    #         - name: Code checkout
+    #         uses: actions/checkout@v4

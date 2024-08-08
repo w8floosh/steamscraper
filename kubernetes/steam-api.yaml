@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: steamapi-statefulset
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      steamscraper.io/name: steamapi
+  template:
+    metadata:
+      labels:
+        steamscraper.io/name: steamapi
+    spec:
+      containers:
+      - name: steamapi
+        image: python:latest
+        ports:
+        - containerPort: 443
+        env:
+        - name: REDIS_HOST
+          value: redis
+        - name: REDIS_PORT
+          value: "6379"
+        - name: STEAMAPI_CG
+          value: STEAMAPI_CG
+        - name: REDIS_REQUEST_TIMEOUT
+          value: 3000
+        - name: REDIS_RESPONSE_TIMEOUT
+          value: 3000
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: steamapi-cache-service
+spec:
+  selector:
+    matchLabels:
+      steamscraper.io/name: redis-server
+  ports:
+    - protocol: TCP
+      port: 443
+      targetPort: 6379
