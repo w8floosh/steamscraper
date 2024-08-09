@@ -28,7 +28,7 @@ jobs:
                 output-credentials: true
 
             - name: Build & Upload backend server image to ECR
-              uses: docker://ghcr.io/kciter/aws-ecr-action:latest
+              uses: kciter/aws-ecr-action@v5
               with:
                 access_key_id: ${{ steps.aws-configuration.outputs.aws-access-key-id }}
                 secret_access_key: ${{ steps.aws-configuration.outputs.aws-secret-access-key }}
@@ -38,11 +38,12 @@ jobs:
                 tags: latest,${{ github.sha }}
                 image_scanning_configuration: true
                 dockerfile: ./api/Dockerfile
+                path: ./api
                   
             
             
             - name: Build & Upload Steam API proxy image to ECR
-              uses: docker://ghcr.io/kciter/aws-ecr-action:latest
+              uses: kciter/aws-ecr-action@v5
               with:
                 access_key_id: ${{ steps.aws-configuration.outputs.aws-access-key-id }}
                 secret_access_key: ${{ steps.aws-configuration.outputs.aws-secret-access-key }}
@@ -52,9 +53,10 @@ jobs:
                 tags: latest,${{ github.sha }}
                 image_scanning_configuration: true
                 dockerfile: ./steamapi/Dockerfile
+                path: ./steamapi
             
             - name: Build & Upload web server image to ECR
-              uses: docker://ghcr.io/kciter/aws-ecr-action:latest
+              uses: kciter/aws-ecr-action@v5
               with:
                 access_key_id: ${{ steps.aws-configuration.outputs.aws-access-key-id }}
                 secret_access_key: ${{ steps.aws-configuration.outputs.aws-secret-access-key }}
@@ -64,9 +66,10 @@ jobs:
                 tags: latest,${{ github.sha }}
                 image_scanning_configuration: true
                 dockerfile: ./client/Dockerfile
+                path: ./client
             
             - name: Build & Upload auth server image to ECR
-              uses: docker://ghcr.io/kciter/aws-ecr-action:latest
+              uses: kciter/aws-ecr-action@v5
               with:
                 access_key_id: ${{ steps.aws-configuration.outputs.aws-access-key-id }}
                 secret_access_key: ${{ steps.aws-configuration.outputs.aws-secret-access-key }}
@@ -76,9 +79,10 @@ jobs:
                 tags: latest,${{ github.sha }}
                 image_scanning_configuration: true
                 dockerfile: ./auth/Dockerfile
+                path: ./auth
                 
             - name: Build & Upload Redis server image to ECR
-              uses: docker://ghcr.io/kciter/aws-ecr-action:latest
+              uses: kciter/aws-ecr-action@v5
               with:
                 access_key_id: ${{ steps.aws-configuration.outputs.aws-access-key-id }}
                 secret_access_key: ${{ steps.aws-configuration.outputs.aws-secret-access-key }}
@@ -88,6 +92,7 @@ jobs:
                 tags: latest,${{ github.sha }}
                 image_scanning_configuration: true
                 dockerfile: ./redis/Dockerfile
+                path: ./redis
                 
     # Testing:
     #     runs-on: ubuntu-latest
