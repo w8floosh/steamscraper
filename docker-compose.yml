@@ -6,17 +6,17 @@ networks:
         - subnet: 172.19.0.0/16
 
 services:
-  client:
+  frontend:
     build: ./client
     restart: always
     ports: 
       - "9000:443"
-    container_name: client
+    container_name: frontend
     env_file:
       - client/.env.prod
     depends_on:
     - auth
-    - api
+    - backend
     - steamapi
     - nginx
     - redis
@@ -52,12 +52,12 @@ services:
     networks:
       - lbnet
   
-  api:
+  backend:
     build: ./api
     restart: always
     ports: 
       - "3001:3001"
-    container_name: api
+    container_name: backend
     depends_on:
       - nginx
       - redis
@@ -73,7 +73,7 @@ services:
       - ./steamapi/.env.prod
     container_name: steamapi
     depends_on:
-      - api
+      - backend
       - nginx
       - redis
     networks:
