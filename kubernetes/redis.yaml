@@ -1,9 +1,8 @@
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: redis-service
+  name: redis-server
 spec:
-  serviceName: redis
   replicas: 1
   selector:
     matchLabels:
@@ -24,9 +23,9 @@ kind: Service
 metadata:
   name: redis-service
 spec:
-  clusterIP: None
   selector:
-    steamscraper.io/name: redis-server
+    steamscraper.io/name: redis
   ports:
     - name: redis
+      protocol: redis
       port: 6379

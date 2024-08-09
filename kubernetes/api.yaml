@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: backend-server-deployment
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       steamscraper.io/name: backend-server
@@ -24,16 +24,3 @@ spec:
           value: "6379"
         - name: BACKEND_CG
         - value: BACKEND_CG
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: backend-message-broker-service
-spec:
-  selector:
-    matchLabels:
-      steamscraper.io/name: redis-server
-  ports:
-    - protocol: TCP
-      port: 3001
-      targetPort: 6379

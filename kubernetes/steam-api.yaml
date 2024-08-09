@@ -3,7 +3,7 @@ kind: StatefulSet
 metadata:
   name: steamapi-statefulset
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       steamscraper.io/name: steamapi
@@ -33,12 +33,11 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: steamapi-cache-service
+  name: steamapi-service
 spec:
   selector:
     matchLabels:
-      steamscraper.io/name: redis-server
+      steamscraper.io/name: steamapi
   ports:
-    - protocol: TCP
-      port: 443
-      targetPort: 6379
+    - port: 443
+  type: LoadBalancer

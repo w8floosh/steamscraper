@@ -1,11 +1,11 @@
 apiVersion: apps/v1
-kind: StatefulSet
+kind: Deployment
 metadata:
-  name: auth-server-statefulset
+  name: auth-server-deployment
   labels:
     app: auth-server
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       steamscraper.io/name: auth-server
@@ -18,9 +18,8 @@ spec:
       - name: auth-server
         image: node:18
         ports:
-        - containerPort: 3000
+        - containerPort: 443
 ---
-# 
 apiVersion: v1
 kind: Service
 metadata:
@@ -29,5 +28,5 @@ spec:
   selector:
     steamscraper.io/name: auth-server
   ports:
-    - port: 3000
-      targetPort: 3000
+    - port: 443
+  type: LoadBalancer 
