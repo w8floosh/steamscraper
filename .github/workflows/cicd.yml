@@ -19,17 +19,19 @@ jobs:
               uses: actions/checkout@v4  
 
             - name: Configure AWS credentials from the OIDC role
+              id: aws-configuration
               uses: aws-actions/configure-aws-credentials@v4
               with:
                 role-to-assume: ${{secrets.AWS_ROLE_ARN}}
                 aws-region: ${{env.AWS_REGION}}
                 role-session-name: steamscraper-cicd
+                output-credentials: true
                 
             - name: Build & Upload backend server image to ECR
               uses: appleboy/docker-ecr-action@master
               with:
-                  access_key: ${{ env.AWS_ACCESS_KEY_ID }}
-                  secret_key: ${{ env.AWS_SECRET_ACCESS_KEY }}
+                  access_key: ${{ steps.aws-configuration.outputs.aws-access-key-id }}
+                  secret_key: ${{ steps.aws-configuration.outputs.aws-secret-access-key }}
                   registry: ${{ env.ECR_PUBLIC_URI }}
                   repo: ${{ env.ECR_REPOSITORY }}
                   region: ${{ env.AWS_REGION }}
@@ -41,8 +43,8 @@ jobs:
             - name: Build & Upload Steam API proxy image to ECR
               uses: appleboy/docker-ecr-action@master
               with:
-                  access_key: ${{ env.AWS_ACCESS_KEY_ID }}
-                  secret_key: ${{ env.AWS_SECRET_ACCESS_KEY }}
+                  access_key: ${{ steps.aws-configuration.outputs.aws-access-key-id }}
+                  secret_key: ${{ steps.aws-configuration.outputs.aws-secret-access-key }}
                   registry: ${{ env.ECR_PUBLIC_URI }}
                   repo: ${{ env.ECR_REPOSITORY }}
                   region: ${{ env.AWS_REGION }}
@@ -54,8 +56,8 @@ jobs:
             - name: Build & Upload web server image to ECR
               uses: appleboy/docker-ecr-action@master
               with:
-                  access_key: ${{ env.AWS_ACCESS_KEY_ID }}
-                  secret_key: ${{ env.AWS_SECRET_ACCESS_KEY }}
+                  access_key: ${{ steps.aws-configuration.outputs.aws-access-key-id }}
+                  secret_key: ${{ steps.aws-configuration.outputs.aws-secret-access-key }}
                   registry: ${{ env.ECR_PUBLIC_URI }}
                   repo: ${{ env.ECR_REPOSITORY }}
                   region: ${{ env.AWS_REGION }}
@@ -67,8 +69,8 @@ jobs:
             - name: Build & Upload auth server image to ECR
               uses: appleboy/docker-ecr-action@master
               with:
-                  access_key: ${{ env.AWS_ACCESS_KEY_ID }}
-                  secret_key: ${{ env.AWS_SECRET_ACCESS_KEY }}
+                  access_key: ${{ steps.aws-configuration.outputs.aws-access-key-id }}
+                  secret_key: ${{ steps.aws-configuration.outputs.aws-secret-access-key }}
                   registry: ${{ env.ECR_PUBLIC_URI }}
                   repo: ${{ env.ECR_REPOSITORY }}
                   region: ${{ env.AWS_REGION }}
@@ -80,8 +82,8 @@ jobs:
             -   name: Build & Upload Redis server image to ECR
                 uses: appleboy/docker-ecr-action@master
                 with:
-                  access_key: ${{ env.AWS_ACCESS_KEY_ID }}
-                  secret_key: ${{ env.AWS_SECRET_ACCESS_KEY }}
+                  access_key: ${{ steps.aws-configuration.outputs.aws-access-key-id }}
+                  secret_key: ${{ steps.aws-configuration.outputs.aws-secret-access-key }}
                   registry: ${{ env.ECR_PUBLIC_URI }}
                   repo: ${{ env.ECR_REPOSITORY }}
                   region: ${{ env.AWS_REGION }}
