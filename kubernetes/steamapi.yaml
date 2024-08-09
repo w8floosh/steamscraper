@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: steamapi-statefulset
+  namespace: backend
 spec:
   replicas: 1
   selector:
@@ -28,12 +29,22 @@ spec:
           value: 3000
         - name: REDIS_RESPONSE_TIMEOUT
           value: 3000
+        volumeMounts:
+        - name: certs
+          mountPath: "/etc/ssl/certs"
+          readOnly: true
+
+      volumes:
+      - name: certs
+        secret:
+          secretName: tls-cert
 
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: steamapi-service
+  name: steamapi
+  namespace: backend
 spec:
   selector:
     matchLabels:

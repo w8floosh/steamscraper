@@ -1,19 +1,20 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: backend-server-deployment
+  name: compute-server-deployment
+  namespace: backend
 spec:
   replicas: 1
   selector:
     matchLabels:
-      steamscraper.io/name: backend-server
+      steamscraper.io/name: compute
   template:
     metadata:
       labels:
-        steamscraper.io/name: backend-server
+        steamscraper.io/name: compute
     spec:
       containers:
-      - name: backend-server
+      - name: compute
         image: node:18
         ports:
         - containerPort: 3001 

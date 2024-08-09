@@ -2,31 +2,40 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: auth-server-deployment
-  labels:
-    app: auth-server
+  namespace: backend
 spec:
   replicas: 1
   selector:
     matchLabels:
-      steamscraper.io/name: auth-server
+      steamscraper.io/name: auth
   template:
     metadata:
       labels:
-        steamscraper.io/name: auth-server
+        steamscraper.io/name: auth
     spec:
       containers:
-      - name: auth-server
+      - name: auth
         image: node:18
         ports:
         - containerPort: 443
+        volumeMounts:
+          - name: certs
+            mountPath: "/etc/ssl/certs"
+            readOnly: true
+
+      volumes:
+      - name: certs
+        secret:
+          secretName: tls-cert
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: auth-service
+  name: auth
+  namespace: backend
 spec:
   selector:
-    steamscraper.io/name: auth-server
+    steamscraper.io/name: auth
   ports:
     - port: 443
   type: LoadBalancer 
