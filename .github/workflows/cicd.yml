@@ -32,7 +32,8 @@ jobs:
                 access_key_id: ${{ steps.aws-configuration.outputs.aws-access-key-id }}
                 secret_access_key: ${{ steps.aws-configuration.outputs.aws-secret-access-key }}
                 account_id: ${{ steps.aws-configuration.outputs.aws-account-id }}
-                repo: ${{env.ECR_REPOSITORY}}
+                repo: ${{env.ECR_REPOSITORY}}-backend
+                create_repo: true
                 region: ${{env.AWS_REGION}}
                 tags: latest,${{ github.sha }}
                 dockerfile: ./api/Dockerfile
@@ -46,7 +47,8 @@ jobs:
                 access_key_id: ${{ steps.aws-configuration.outputs.aws-access-key-id }}
                 secret_access_key: ${{ steps.aws-configuration.outputs.aws-secret-access-key }}
                 account_id: ${{ steps.aws-configuration.outputs.aws-account-id }}
-                repo: ${{env.ECR_REPOSITORY}}
+                repo: ${{env.ECR_REPOSITORY}}-steamapi
+                create_repo: true
                 region: ${{env.AWS_REGION}}
                 tags: latest,${{ github.sha }}
                 dockerfile: ./steamapi/Dockerfile
@@ -58,7 +60,8 @@ jobs:
                 access_key_id: ${{ steps.aws-configuration.outputs.aws-access-key-id }}
                 secret_access_key: ${{ steps.aws-configuration.outputs.aws-secret-access-key }}
                 account_id: ${{ steps.aws-configuration.outputs.aws-account-id }}
-                repo: ${{env.ECR_REPOSITORY}}
+                repo: ${{env.ECR_REPOSITORY}}-web
+                create_repo: true
                 region: ${{env.AWS_REGION}}
                 tags: latest,${{ github.sha }}
                 dockerfile: ./client/Dockerfile
@@ -70,7 +73,8 @@ jobs:
                 access_key_id: ${{ steps.aws-configuration.outputs.aws-access-key-id }}
                 secret_access_key: ${{ steps.aws-configuration.outputs.aws-secret-access-key }}
                 account_id: ${{ steps.aws-configuration.outputs.aws-account-id }}
-                repo: ${{env.ECR_REPOSITORY}}
+                repo: ${{env.ECR_REPOSITORY}}-auth
+                create_repo: true
                 region: ${{env.AWS_REGION}}
                 tags: latest,${{ github.sha }}
                 dockerfile: ./auth/Dockerfile
@@ -82,7 +86,8 @@ jobs:
                 access_key_id: ${{ steps.aws-configuration.outputs.aws-access-key-id }}
                 secret_access_key: ${{ steps.aws-configuration.outputs.aws-secret-access-key }}
                 account_id: ${{ steps.aws-configuration.outputs.aws-account-id }}
-                repo: ${{env.ECR_REPOSITORY}}
+                repo: ${{env.ECR_REPOSITORY}}-redis
+                create_repo: true
                 region: ${{env.AWS_REGION}}
                 tags: latest,${{ github.sha }}
                 dockerfile: ./redis/Dockerfile
