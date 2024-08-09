@@ -36,7 +36,6 @@ jobs:
                 repo: ${{env.ECR_PUBLIC_URI}}
                 region: ${{env.AWS_REGION}}
                 tags: latest,${{ github.sha }}
-                image_scanning_configuration: true
                 dockerfile: ./api/Dockerfile
                 path: ./api
                   
@@ -51,7 +50,6 @@ jobs:
                 repo: ${{env.ECR_PUBLIC_URI}}
                 region: ${{env.AWS_REGION}}
                 tags: latest,${{ github.sha }}
-                image_scanning_configuration: true
                 dockerfile: ./steamapi/Dockerfile
                 path: ./steamapi
             
@@ -64,7 +62,6 @@ jobs:
                 repo: ${{env.ECR_PUBLIC_URI}}
                 region: ${{env.AWS_REGION}}
                 tags: latest,${{ github.sha }}
-                image_scanning_configuration: true
                 dockerfile: ./client/Dockerfile
                 path: ./client
             
@@ -77,7 +74,6 @@ jobs:
                 repo: ${{env.ECR_PUBLIC_URI}}
                 region: ${{env.AWS_REGION}}
                 tags: latest,${{ github.sha }}
-                image_scanning_configuration: true
                 dockerfile: ./auth/Dockerfile
                 path: ./auth
                 
@@ -90,7 +86,6 @@ jobs:
                 repo: ${{env.ECR_PUBLIC_URI}}
                 region: ${{env.AWS_REGION}}
                 tags: latest,${{ github.sha }}
-                image_scanning_configuration: true
                 dockerfile: ./redis/Dockerfile
                 path: ./redis
                 
