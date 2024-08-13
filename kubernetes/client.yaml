@@ -15,7 +15,13 @@ spec:
     spec:
       containers:
       - name: web-server
-        image: nginx:latest
+        image: $(ECR_URL)-frontend:latest
+        env:
+        - name: ECR_URL
+        - valueFrom: 
+            secretKeyRef:
+              name: ecr
+              key: ECR_URL
         volumeMounts:
         - name: certs
           mountPath: "/etc/ssl/certs"
@@ -26,6 +32,8 @@ spec:
       - name: certs
         secret:
           secretName: tls-cert
+      nodeSelector:
+        group: frontend-group
 ---
 apiVersion: v1
 kind: Service

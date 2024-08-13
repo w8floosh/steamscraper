@@ -15,9 +15,17 @@ spec:
     spec:
       containers:
       - name: redis
-        image: redis:latest
+        image: $(ECR_URL)-redis:latest
+        env:
+        - name: ECR_URL
+        - valueFrom: 
+            secretKeyRef:
+              name: ecr
+              key: ECR_URL
         ports:
         - containerPort: 6379
+      nodeSelector:
+        group: database-cache-group
 ---
 apiVersion: v1
 kind: Service

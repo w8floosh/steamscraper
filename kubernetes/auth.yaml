@@ -15,13 +15,21 @@ spec:
     spec:
       containers:
       - name: auth
-        image: node:18
+        image: $(ECR_URL)-auth:latest
+        env:
+        - name: ECR_URL
+        - valueFrom: 
+            secretKeyRef:
+              name: ecr
+              key: ECR_URL
         ports:
         - containerPort: 443
         volumeMounts:
           - name: certs
             mountPath: "/etc/ssl/certs"
             readOnly: true
+      nodeSelector:
+        group: backend-group
 
       volumes:
       - name: certs

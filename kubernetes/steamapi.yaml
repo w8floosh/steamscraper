@@ -15,10 +15,15 @@ spec:
     spec:
       containers:
       - name: steamapi
-        image: python:latest
         ports:
         - containerPort: 443
+        image: $(ECR_URL)-steamapi:latest
         env:
+        - name: ECR_URL
+        - valueFrom: 
+            secretKeyRef:
+              name: ecr
+              key: ECR_URL
         - name: REDIS_HOST
           value: redis
         - name: REDIS_PORT
@@ -39,6 +44,9 @@ spec:
         secret:
           secretName: tls-cert
 
+      nodeSelector:
+        group: backend-group
+
 ---
 apiVersion: v1
 kind: Service
@@ -52,3 +60,4 @@ spec:
   ports:
     - port: 443
   type: LoadBalancer
+  

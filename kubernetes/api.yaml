@@ -15,13 +15,20 @@ spec:
     spec:
       containers:
       - name: compute
-        image: node:18
         ports:
         - containerPort: 3001 
+        image: $(ECR_URL)-backend:latest
         env:
+        - name: ECR_URL
+        - valueFrom: 
+            secretKeyRef:
+              name: ecr
+              key: ECR_URL
         - name: REDIS_HOST
           value: redis  
         - name: REDIS_PORT
           value: "6379"
         - name: BACKEND_CG
         - value: BACKEND_CG
+      nodeSelector:
+        group: backend-group
