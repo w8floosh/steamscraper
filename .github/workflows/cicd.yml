@@ -3,98 +3,109 @@ on: workflow_dispatch
 permissions:
   id-token: write # This is required for requesting the JWT
   contents: read  # This is required for actions/checkout
+
 env:
-    AWS_REGION: us-east-1
-    ECR_REPOSITORY: steamscraper
-    EKS_CLUSTER: steamscraper-eks
-
+  AWS_REGION: us-east-1
+  ECR_REPOSITORY: steamscraper
+  EKS_CLUSTER: steamscraper-eks
+  
 jobs:
-    
-    build_publish:
-        # needs: Testing
-        runs-on: ubuntu-latest
-        steps:
-            - name: Code checkout
-              uses: actions/checkout@v4  
+  testing:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Code checkout
+        uses: actions/checkout@v4
 
-            - name: Configure AWS credentials from the OIDC role
-              id: aws-configuration
-              uses: aws-actions/configure-aws-credentials@v4
-              with:
-                role-to-assume: ${{secrets.AWS_ROLE_ARN}}
-                aws-region: ${{env.AWS_REGION}}
-                role-session-name: steamscraper-cicd
-                output-credentials: true
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
 
-            - name: Build & Upload backend server image to ECR
-              uses: kciter/aws-ecr-action@v5
-              with:
-                access_key_id: ${{ steps.aws-configuration.outputs.aws-access-key-id }}
-                secret_access_key: ${{ steps.aws-configuration.outputs.aws-secret-access-key }}
-                account_id: ${{ steps.aws-configuration.outputs.aws-account-id }}
-                repo: ${{env.ECR_REPOSITORY}}-backend
-                create_repo: true
-                region: ${{env.AWS_REGION}}
-                tags: latest,${{ github.sha }}
-                dockerfile: ./api/Dockerfile
-                path: ./api
-                  
+      - name: Install dependencies
+        working-directory: ./api
+        run: npm install
+
+      - name: Run tests
+        working-directory: ./api
+        run: npm run test
+
+  build_publish:
+    needs: testing
+    runs-on: ubuntu-latest
+    steps:
+        - name: Code checkout
+          uses: actions/checkout@v4  
+
+        - name: Configure AWS credentials from the OIDC role
+          id: aws-configuration
+          uses: aws-actions/configure-aws-credentials@v4
+          with:
+            role-to-assume: ${{secrets.AWS_ROLE_ARN}}
+            aws-region: ${{env.AWS_REGION}}
+            role-session-name: steamscraper-cicd
+            output-credentials: true
+
+        - name: Build & Upload backend server image to ECR
+          uses: kciter/aws-ecr-action@v5
+          with:
+            access_key_id: ${{ steps.aws-configuration.outputs.aws-access-key-id }}
+            secret_access_key: ${{ steps.aws-configuration.outputs.aws-secret-access-key }}
+            account_id: ${{ steps.aws-configuration.outputs.aws-account-id }}
+            repo: ${{env.ECR_REPOSITORY}}-backend
+            create_repo: true
+            region: ${{env.AWS_REGION}}
+            tags: latest,${{ github.sha }}
+            dockerfile: ./api/Dockerfile
+            path: ./api
+        
+        - name: Build & Upload Steam API proxy image to ECR
+          uses: kciter/aws-ecr-action@v5
+          with:
+            access_key_id: ${{ steps.aws-configuration.outputs.aws-access-key-id }}
+            secret_access_key: ${{ steps.aws-configuration.outputs.aws-secret-access-key }}
+            account_id: ${{ steps.aws-configuration.outputs.aws-account-id }}
+            repo: ${{env.ECR_REPOSITORY}}-steamapi
+            create_repo: true
+            region: ${{env.AWS_REGION}}
+            tags: latest,${{ github.sha }}
+            dockerfile: ./steamapi/Dockerfile
+            path: ./steamapi
+        
+        - name: Build & Upload web server image to ECR
+          uses: kciter/aws-ecr-action@v5
+          with:
+            access_key_id: ${{ steps.aws-configuration.outputs.aws-access-key-id }}
+            secret_access_key: ${{ steps.aws-configuration.outputs.aws-secret-access-key }}
+            account_id: ${{ steps.aws-configuration.outputs.aws-account-id }}
+            repo: ${{env.ECR_REPOSITORY}}-web
+            create_repo: true
+            region: ${{env.AWS_REGION}}
+            tags: latest,${{ github.sha }}
+            dockerfile: ./client/Dockerfile
+            path: ./client
+        
+        - name: Build & Upload auth server image to ECR
+          uses: kciter/aws-ecr-action@v5
+          with:
+            access_key_id: ${{ steps.aws-configuration.outputs.aws-access-key-id }}
+            secret_access_key: ${{ steps.aws-configuration.outputs.aws-secret-access-key }}
+            account_id: ${{ steps.aws-configuration.outputs.aws-account-id }}
+            repo: ${{env.ECR_REPOSITORY}}-auth
+            create_repo: true
+            region: ${{env.AWS_REGION}}
+            tags: latest,${{ github.sha }}
+            dockerfile: ./auth/Dockerfile
+            path: ./auth
             
-            
-            - name: Build & Upload Steam API proxy image to ECR
-              uses: kciter/aws-ecr-action@v5
-              with:
-                access_key_id: ${{ steps.aws-configuration.outputs.aws-access-key-id }}
-                secret_access_key: ${{ steps.aws-configuration.outputs.aws-secret-access-key }}
-                account_id: ${{ steps.aws-configuration.outputs.aws-account-id }}
-                repo: ${{env.ECR_REPOSITORY}}-steamapi
-                create_repo: true
-                region: ${{env.AWS_REGION}}
-                tags: latest,${{ github.sha }}
-                dockerfile: ./steamapi/Dockerfile
-                path: ./steamapi
-            
-            - name: Build & Upload web server image to ECR
-              uses: kciter/aws-ecr-action@v5
-              with:
-                access_key_id: ${{ steps.aws-configuration.outputs.aws-access-key-id }}
-                secret_access_key: ${{ steps.aws-configuration.outputs.aws-secret-access-key }}
-                account_id: ${{ steps.aws-configuration.outputs.aws-account-id }}
-                repo: ${{env.ECR_REPOSITORY}}-web
-                create_repo: true
-                region: ${{env.AWS_REGION}}
-                tags: latest,${{ github.sha }}
-                dockerfile: ./client/Dockerfile
-                path: ./client
-            
-            - name: Build & Upload auth server image to ECR
-              uses: kciter/aws-ecr-action@v5
-              with:
-                access_key_id: ${{ steps.aws-configuration.outputs.aws-access-key-id }}
-                secret_access_key: ${{ steps.aws-configuration.outputs.aws-secret-access-key }}
-                account_id: ${{ steps.aws-configuration.outputs.aws-account-id }}
-                repo: ${{env.ECR_REPOSITORY}}-auth
-                create_repo: true
-                region: ${{env.AWS_REGION}}
-                tags: latest,${{ github.sha }}
-                dockerfile: ./auth/Dockerfile
-                path: ./auth
-                
-            - name: Build & Upload Redis server image to ECR
-              uses: kciter/aws-ecr-action@v5
-              with:
-                access_key_id: ${{ steps.aws-configuration.outputs.aws-access-key-id }}
-                secret_access_key: ${{ steps.aws-configuration.outputs.aws-secret-access-key }}
-                account_id: ${{ steps.aws-configuration.outputs.aws-account-id }}
-                repo: ${{env.ECR_REPOSITORY}}-redis
-                create_repo: true
-                region: ${{env.AWS_REGION}}
-                tags: latest,${{ github.sha }}
-                dockerfile: ./redis/Dockerfile
-                path: ./redis
-                
-    # Testing:
-    #     runs-on: ubuntu-latest
-    #     steps:
-    #         - name: Code checkout
-    #         uses: actions/checkout@v4
+        - name: Build & Upload Redis server image to ECR
+          uses: kciter/aws-ecr-action@v5
+          with:
+            access_key_id: ${{ steps.aws-configuration.outputs.aws-access-key-id }}
+            secret_access_key: ${{ steps.aws-configuration.outputs.aws-secret-access-key }}
+            account_id: ${{ steps.aws-configuration.outputs.aws-account-id }}
+            repo: ${{env.ECR_REPOSITORY}}-redis
+            create_repo: true
+            region: ${{env.AWS_REGION}}
+            tags: latest,${{ github.sha }}
+            dockerfile: ./redis/Dockerfile
+            path: ./redis
