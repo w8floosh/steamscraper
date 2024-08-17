@@ -1,9 +1,9 @@
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: redis-service
+  name: redis-server
+  namespace: database
 spec:
-  serviceName: redis
   replicas: 1
   selector:
     matchLabels:
@@ -15,18 +15,27 @@ spec:
     spec:
       containers:
       - name: redis
-        image: redis:latest
+        image: $(ECR_URL)-redis:latest
+        env:
+        - name: ECR_URL
+        - valueFrom: 
+            secretKeyRef:
+              name: ecr
+              key: ECR_URL
         ports:
         - containerPort: 6379
+      nodeSelector:
+        group: database-cache-group
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: redis-service
+  name: redis
+  namespace: database
 spec:
-  clusterIP: None
   selector:
-    steamscraper.io/name: redis-server
+    steamscraper.io/name: redis
   ports:
     - name: redis
+      protocol: redis
       port: 6379

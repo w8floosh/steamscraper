@@ -1,21 +1,48 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: client-deployment
-  labels:
-    app: web-server
+  name: web-server-deployment
+  namespace: frontend
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
-      steamscraper.io/name: client
+      steamscraper.io/name: web-server
   template:
     metadata:
       labels:
-        steamscraper.io/name: client
+        steamscraper.io/name: web-server
     spec:
       containers:
       - name: web-server
-        image: nginx:latest
+        image: $(ECR_URL)-frontend:latest
+        env:
+        - name: ECR_URL
+        - valueFrom: 
+            secretKeyRef:
+              name: ecr
+              key: ECR_URL
+        volumeMounts:
+        - name: certs
+          mountPath: "/etc/ssl/certs"
+          readOnly: true
         ports:
         - containerPort: 443
+      volumes:
+      - name: certs
+        secret:
+          secretName: tls-cert
+      nodeSelector:
+        group: frontend-group
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: webserver
+  namespace: frontend
+spec:
+  selector:
+    steamscraper.io/name: web-server
+  ports:
+    - port: 443
+  type: LoadBalancer # if you want your service to be accessible from outside the Kubernetes cluster

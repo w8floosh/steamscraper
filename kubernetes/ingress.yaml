@@ -7,29 +7,33 @@ metadata:
     nginx.ingress.kubernetes.io/auth-url: https://$host/api/auth/oauth/token
     nginx.ingress.kubernetes.io/proxy-buffer-size: 512k
 spec:
+  tls:
+  - hosts:
+    - steamscraper.io
+    secretName: tls-cert
+  
   rules:
   - host: steamscraper.io
     http:
       paths:
-      - path: /client
+      - path: /
         pathType: Prefix
         backend:
           service:
-            name: client-service
+            name: webserver
             port:
               number: 443
-      - path: /auth
+      - path: /api/auth
         pathType: Prefix
         backend:
           service:
-            name: auth-service
+            name: auth
             port:
-              number: 3000
-      - path: /api
+              number: 443
+      - path: /api/steam
         pathType: Prefix
         backend:
           service:
-            name: steamapi-service
+            name: steamapi
             port:
-              number: 8000
-
+              number: 443

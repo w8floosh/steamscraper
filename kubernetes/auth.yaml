@@ -1,33 +1,49 @@
 apiVersion: apps/v1
-kind: StatefulSet
+kind: Deployment
 metadata:
-  name: auth-server-statefulset
-  labels:
-    app: auth-server
+  name: auth-server-deployment
+  namespace: backend
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
-      steamscraper.io/name: auth-server
+      steamscraper.io/name: auth
   template:
     metadata:
       labels:
-        steamscraper.io/name: auth-server
+        steamscraper.io/name: auth
     spec:
       containers:
-      - name: auth-server
-        image: node:18
+      - name: auth
+        image: $(ECR_URL)-auth:latest
+        env:
+        - name: ECR_URL
+        - valueFrom: 
+            secretKeyRef:
+              name: ecr
+              key: ECR_URL
         ports:
-        - containerPort: 3000
+        - containerPort: 443
+        volumeMounts:
+          - name: certs
+            mountPath: "/etc/ssl/certs"
+            readOnly: true
+      nodeSelector:
+        group: backend-group
+
+      volumes:
+      - name: certs
+        secret:
+          secretName: tls-cert
 ---
-# 
 apiVersion: v1
 kind: Service
 metadata:
-  name: auth-service
+  name: auth
+  namespace: backend
 spec:
   selector:
-    steamscraper.io/name: auth-server
+    steamscraper.io/name: auth
   ports:
-    - port: 3000
-      targetPort: 3000
+    - port: 443
+  type: LoadBalancer 

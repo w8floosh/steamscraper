@@ -1,39 +1,34 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: backend-server-deployment
+  name: compute-server-deployment
+  namespace: backend
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
-      steamscraper.io/name: backend-server
+      steamscraper.io/name: compute
   template:
     metadata:
       labels:
-        steamscraper.io/name: backend-server
+        steamscraper.io/name: compute
     spec:
       containers:
-      - name: backend-server
-        image: node:18
+      - name: compute
         ports:
         - containerPort: 3001 
+        image: $(ECR_URL)-backend:latest
         env:
+        - name: ECR_URL
+        - valueFrom: 
+            secretKeyRef:
+              name: ecr
+              key: ECR_URL
         - name: REDIS_HOST
           value: redis  
         - name: REDIS_PORT
           value: "6379"
         - name: BACKEND_CG
         - value: BACKEND_CG
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: backend-message-broker-service
-spec:
-  selector:
-    matchLabels:
-      steamscraper.io/name: redis-server
-  ports:
-    - protocol: TCP
-      port: 3001
-      targetPort: 6379
+      nodeSelector:
+        group: backend-group
