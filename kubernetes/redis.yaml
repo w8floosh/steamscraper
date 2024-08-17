@@ -5,6 +5,7 @@ metadata:
   namespace: database
 spec:
   replicas: 1
+  serviceName: redis
   selector:
     matchLabels:
       steamscraper.io/name: redis
@@ -18,7 +19,7 @@ spec:
         image: $(ECR_URL)-redis:latest
         env:
         - name: ECR_URL
-        - valueFrom: 
+          valueFrom: 
             secretKeyRef:
               name: ecr
               key: ECR_URL
@@ -37,5 +38,4 @@ spec:
     steamscraper.io/name: redis
   ports:
     - name: redis
-      protocol: redis
       port: 6379
