@@ -18,7 +18,7 @@ spec:
         image: $(ECR_URL)-frontend:latest
         env:
         - name: ECR_URL
-        - valueFrom: 
+          valueFrom: 
             secretKeyRef:
               name: ecr
               key: ECR_URL
@@ -28,6 +28,13 @@ spec:
           readOnly: true
         ports:
         - containerPort: 443
+        resources:
+          limits:
+            cpu: "0.5"
+            memory: "512Mi"
+          requests:
+            cpu: "0.1"
+            memory: "128Mi"
       volumes:
       - name: certs
         secret:

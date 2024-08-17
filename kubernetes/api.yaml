@@ -20,7 +20,7 @@ spec:
         image: $(ECR_URL)-backend:latest
         env:
         - name: ECR_URL
-        - valueFrom: 
+          valueFrom: 
             secretKeyRef:
               name: ecr
               key: ECR_URL
@@ -29,6 +29,13 @@ spec:
         - name: REDIS_PORT
           value: "6379"
         - name: BACKEND_CG
-        - value: BACKEND_CG
+          value: BACKEND_CG
+        resources:
+          limits:
+            cpu: "0.5"
+            memory: "512Mi"
+          requests:
+            cpu: "0.1"
+            memory: "256Mi"
       nodeSelector:
         group: backend-group

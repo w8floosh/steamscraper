@@ -20,7 +20,7 @@ spec:
         image: $(ECR_URL)-steamapi:latest
         env:
         - name: ECR_URL
-        - valueFrom: 
+          valueFrom: 
             secretKeyRef:
               name: ecr
               key: ECR_URL
