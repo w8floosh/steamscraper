@@ -114,6 +114,9 @@ jobs:
     needs: build_publish
     runs-on: ubuntu-latest
     steps:
+      - name: Code checkout
+        uses: actions/checkout@v4  
+
       - name: Configure AWS credentials from the OIDC role
         id: aws-configuration
         uses: aws-actions/configure-aws-credentials@v4
@@ -130,7 +133,4 @@ jobs:
         run: aws ecr get-login-password --region ${{env.AWS_REGION}} | docker login --username AWS --password-stdin ${{ steps.aws-configuration.outputs.aws-account-id }}.dkr.ecr.${{env.AWS_REGION}}.amazonaws.com
 
       - name: Deploy app to EKS
-        run: |
-          echo "$PWD"
-          ls
-          kubectl apply -f ./kubernetes
+        run: kubectl apply -f kubernetes
