@@ -130,4 +130,7 @@ jobs:
         run: aws ecr get-login-password --region ${{env.AWS_REGION}} | docker login --username AWS --password-stdin ${{ steps.aws-configuration.outputs.aws-account-id }}.dkr.ecr.${{env.AWS_REGION}}.amazonaws.com
 
       - name: Deploy app to EKS
-        run: kubectl apply -f kubernetes/
+        run: |
+          echo "$PWD"
+          ls
+          kubectl apply -f ./kubernetes
