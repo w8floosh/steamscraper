@@ -131,6 +131,8 @@ jobs:
 
       - name: Login to ECR
         run: aws ecr get-login-password --region ${{env.AWS_REGION}} | docker login --username AWS --password-stdin ${{ steps.aws-configuration.outputs.aws-account-id }}.dkr.ecr.${{env.AWS_REGION}}.amazonaws.com
-
+      
+      - name: Install Kubernetes namespaces to EKS
+        run: kubectl apply -f kubernetes/namespaces
       - name: Deploy app to EKS
         run: kubectl apply -f kubernetes

@@ -5,6 +5,7 @@ metadata:
   namespace: database
 spec:
   replicas: 1
+  serviceName: redis
   selector:
     matchLabels:
       steamscraper.io/name: redis
@@ -37,5 +38,4 @@ spec:
     steamscraper.io/name: redis
   ports:
     - name: redis
-      protocol: redis
       port: 6379
