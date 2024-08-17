@@ -109,3 +109,25 @@ jobs:
             tags: latest,${{ github.sha }}
             dockerfile: ./redis/Dockerfile
             path: ./redis
+  
+  deploy:
+    needs: build_publish
+    runs-on: ubuntu-latest
+    steps:
+      - name: Configure AWS credentials from the OIDC role
+        id: aws-configuration
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{secrets.AWS_ROLE_ARN}}
+          aws-region: ${{env.AWS_REGION}}
+          role-session-name: steamscraper-deploy
+          output-credentials: true
+
+      - name: Update kubeconfig file
+        run: aws eks update-kubeconfig --name ${{env.EKS_CLUSTER}} --region ${{env.AWS_REGION}}
+
+      - name: Login to ECR
+        run: aws ecr get-login-password --region ${{env.AWS_REGION}} | docker login --username AWS --password-stdin ${{ steps.aws-configuration.outputs.aws-account-id }}.dkr.ecr.${{env.AWS_REGION}}.amazonaws.com
+
+      - name: Deploy app to EKS
+        run: kubectl apply -f kubernetes/
