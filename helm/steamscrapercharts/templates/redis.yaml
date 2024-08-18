@@ -15,7 +15,9 @@ spec:
     spec:
       containers:
       - name: redis
-        image: {{.Values.ecr}}-redis:{{.Values.tag}}
+        image: redis/redis-stack-server:latest
+        command: ["redis-server"]
+        args: ["--save", "20", "1", "--loglevel", "warning", "--protected-mode", "no", "--loadmodule", "/opt/redis-stack/lib/redisearch.so", "--loadmodule", "/opt/redis-stack/lib/rejson.so"]
         ports:
         - containerPort: 6379
         resources:

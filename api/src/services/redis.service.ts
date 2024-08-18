@@ -32,13 +32,14 @@ export class RedisService implements OnModuleInit, OnModuleDestroy {
 
   async onModuleInit() {
     setTimeout(async () => {
-      // await this.client.xgroup(
-      //   'CREATE',
-      //   REQUEST_STREAM,
-      //   CONSUMER_GROUP,
-      //   '$',
-      //   'MKSTREAM',
-      // );
+      await this.client.xgroup(
+        'CREATE',
+        REQUEST_STREAM,
+        CONSUMER_GROUP,
+        '$',
+        'MKSTREAM',
+      );
+      await this.client.xtrim(REQUEST_STREAM, 'MAXLEN', '~', '1000')
       while (true) {
         let requests = await this.client.xreadgroup(
           'GROUP',
