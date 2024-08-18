@@ -16,15 +16,15 @@ spec:
       containers:
       - name: steamapi
         ports:
-        - containerPort: 443
+        - containerPort: 8080
         image: {{.Values.ecr}}-steamapi:{{.Values.tag}}
         env:
         - name: REDIS_HOST
-          value: redis
+          value: "redis.default.svc.cluster.local"
         - name: REDIS_PORT
           value: "6379"
         - name: STEAMAPI_CG
-          value: STEAMAPI_CG
+          value: "STEAMAPI_CG"
         - name: REDIS_REQUEST_TIMEOUT
           value: "3000"
         - name: REDIS_RESPONSE_TIMEOUT
@@ -33,6 +33,13 @@ spec:
         - name: certs
           mountPath: "/etc/ssl/certs"
           readOnly: true
+        resources:
+          limits:
+            cpu: "0.5"
+            memory: "384Mi"
+          requests:
+            cpu: "0.1"
+            memory: "128Mi"
 
       volumes:
       - name: certs
@@ -51,6 +58,7 @@ spec:
   selector:
       steamscraper.io/name: steamapi
   ports:
-    - port: 443
+    - port: 80
+      targetPort: 8080
   type: LoadBalancer
   

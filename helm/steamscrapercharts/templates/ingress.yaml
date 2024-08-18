@@ -22,18 +22,18 @@ spec:
           service:
             name: webserver
             port:
-              number: 443
+              number: 80
       - path: /api/auth
         pathType: Prefix
         backend:
           service:
             name: auth
             port:
-              number: 443
+              number: 80
       - path: /api/steam
         pathType: Prefix
         backend:
           service:
             name: steamapi
             port:
-              number: 443
+              number: 80

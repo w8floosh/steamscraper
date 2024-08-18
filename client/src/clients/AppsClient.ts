@@ -20,7 +20,7 @@ export default new (class AppsClient {
     max_results?: number,
     last_appid?: string
   ): Promise<ISteamAPIResponse<AppListResponse>> {
-    const url = process.env.STEAMAPI_PROXY_URL + this.endpoint_store;
+    const url = axios.defaults.baseURL + this.endpoint_store;
     const params = {
       max_results,
       last_appid,
@@ -48,7 +48,7 @@ export default new (class AppsClient {
     count?: number,
     maxlength?: number
   ): Promise<ISteamAPIResponse<AppNewsResponse>> {
-    const url = process.env.STEAMAPI_PROXY_URL + this.endpoint_news + appid;
+    const url = axios.defaults.baseURL + this.endpoint_news + appid;
     const params = {
       count,
       maxlength,
@@ -78,7 +78,7 @@ export default new (class AppsClient {
     language?: string
   ): Promise<ISteamAPIResponse<AppDetailsResponse>> {
     const url =
-      process.env.STEAMAPI_PROXY_URL +
+      axios.defaults.baseURL +
       this.endpoint_store +
       '/details/' +
       appid;
@@ -109,7 +109,7 @@ export default new (class AppsClient {
     gameid: number
   ): Promise<ISteamAPIResponse<AppGlobalAchievementPercentagesResponse>> {
     const url =
-      process.env.STEAMAPI_PROXY_URL +
+      axios.defaults.baseURL +
       this.endpoint_apps +
       gameid +
       '/achievements';
@@ -136,7 +136,7 @@ export default new (class AppsClient {
     appid: number
   ): Promise<ISteamAPIResponse<NoCurrentPlayersResponse>> {
     const url =
-      process.env.STEAMAPI_PROXY_URL + this.endpoint_apps + appid + '/current';
+      axios.defaults.baseURL + this.endpoint_apps + appid + '/current';
     const params = {
       key: storeToRefs(useAuthStore()).steamWebAPIToken.value,
     };
