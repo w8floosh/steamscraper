@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: web-server
-        image: {{.Values.ecr}}-frontend:{{.Values.tag}}
+        image: {{.Values.ecr}}-web:{{.Values.tag}}
         volumeMounts:
         - name: certs
           mountPath: "/etc/ssl/certs"
