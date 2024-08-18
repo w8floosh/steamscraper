@@ -10,7 +10,7 @@ env:
   EKS_CLUSTER: steamscraper-eks
   
 jobs:
-  deploy:
+  undeploy:
     runs-on: ubuntu-latest
     steps:
       - name: Code checkout
@@ -31,5 +31,13 @@ jobs:
       - name: Login to ECR
         run: aws ecr get-login-password --region ${{env.AWS_REGION}} | docker login --username AWS --password-stdin ${{ steps.aws-configuration.outputs.aws-account-id }}.dkr.ecr.${{env.AWS_REGION}}.amazonaws.com
       
-      - name: Remove Kubernetes resources
-        run: kubectl delete -f kubernetes/
+      - name: Uninstall Helm charts
+        uses: bitovi/github-actions-deploy-eks-helm@v1.2.10
+        with:
+          aws-access-key-id: ${{ steps.aws-configuration.outputs.aws-access-key-id }}
+          aws-secret-access-key: ${{ steps.aws-configuration.outputs.aws-secret-access-key }}
+          aws-region: ${{ env.AWS_REGION }}
+          cluster-name: ${{ env.EKS_CLUSTER }}
+          action: uninstall
+          name: steamscraper-stack
+          create-namespace: false
