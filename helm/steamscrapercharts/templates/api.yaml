@@ -2,7 +2,6 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: compute-server-deployment
-  namespace: backend
 spec:
   replicas: 1
   selector:
