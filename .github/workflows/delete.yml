@@ -40,3 +40,4 @@ jobs:
           cluster-name: ${{ env.EKS_CLUSTER }}
           action: uninstall
           name: steamscraper-stack
+          create-namespace: false
