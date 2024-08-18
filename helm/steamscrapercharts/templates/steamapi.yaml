@@ -45,6 +45,11 @@ spec:
       - name: certs
         secret:
           secretName: tls-cert
+          items: 
+            - key: tls.crt
+              path: steamscraper.io.crt
+            - key: tls.key
+              path: steamscraper.io.key
 
       nodeSelector:
         group: backend-group

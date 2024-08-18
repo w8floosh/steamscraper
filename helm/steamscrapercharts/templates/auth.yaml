@@ -19,7 +19,7 @@ spec:
         - containerPort: 443
         volumeMounts:
           - name: certs
-            mountPath: "/etc/ssl/certs"
+            mountPath: "/etc/ssl/certs/"
             readOnly: true
         resources:
           limits:
@@ -50,6 +50,11 @@ spec:
       - name: certs
         secret:
           secretName: tls-cert
+          items: 
+            - key: tls.crt
+              path: steamscraper.io.crt
+            - key: tls.key
+              path: steamscraper.io.key
 ---
 apiVersion: v1
 kind: Service
