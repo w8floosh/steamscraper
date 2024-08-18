@@ -39,7 +39,6 @@ jobs:
           aws-region: ${{ env.AWS_REGION }}
           cluster-name: ${{ env.EKS_CLUSTER }}
           chart-path: helm/steamscrapercharts
-          namespace: default
           values: ecr=${{ steps.aws-configuration.outputs.aws-account-id }}.dkr.ecr.${{env.AWS_REGION}}.amazonaws.com/${{env.ECR_REPOSITORY}},tag=latest
           name: steamscraper-stack
           action: uninstall
