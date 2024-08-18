@@ -97,18 +97,6 @@ jobs:
             dockerfile: ./auth/Dockerfile
             path: ./auth
             
-        - name: Build & Upload Redis server image to ECR
-          uses: kciter/aws-ecr-action@v5
-          with:
-            access_key_id: ${{ steps.aws-configuration.outputs.aws-access-key-id }}
-            secret_access_key: ${{ steps.aws-configuration.outputs.aws-secret-access-key }}
-            account_id: ${{ steps.aws-configuration.outputs.aws-account-id }}
-            repo: ${{env.ECR_REPOSITORY}}-redis
-            create_repo: true
-            region: ${{env.AWS_REGION}}
-            tags: latest,${{ github.sha }}
-            dockerfile: ./redis/Dockerfile
-            path: ./redis
   
   deploy:
     needs: build_publish
