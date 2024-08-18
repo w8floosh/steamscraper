@@ -10,7 +10,7 @@ env:
   EKS_CLUSTER: steamscraper-eks
   
 jobs:
-  deploy:
+  undeploy:
     runs-on: ubuntu-latest
     steps:
       - name: Code checkout
@@ -38,7 +38,5 @@ jobs:
           aws-secret-access-key: ${{ steps.aws-configuration.outputs.aws-secret-access-key }}
           aws-region: ${{ env.AWS_REGION }}
           cluster-name: ${{ env.EKS_CLUSTER }}
-          chart-path: helm/steamscrapercharts
-          values: ecr=${{ steps.aws-configuration.outputs.aws-account-id }}.dkr.ecr.${{env.AWS_REGION}}.amazonaws.com/${{env.ECR_REPOSITORY}},tag=latest
-          name: steamscraper-stack
           action: uninstall
+          name: steamscraper-stack
