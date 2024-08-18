@@ -15,13 +15,7 @@ spec:
     spec:
       containers:
       - name: web-server
-        image: $(ECR_URL)-frontend:latest
-        env:
-        - name: ECR_URL
-          valueFrom: 
-            secretKeyRef:
-              name: ecr
-              key: ECR_URL
+        image: {{.Values.ecr}}-frontend:{{.Values.tag}}
         volumeMounts:
         - name: certs
           mountPath: "/etc/ssl/certs"

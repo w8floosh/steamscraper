@@ -16,13 +16,7 @@ spec:
     spec:
       containers:
       - name: redis
-        image: $(ECR_URL)-redis:latest
-        env:
-        - name: ECR_URL
-          valueFrom: 
-            secretKeyRef:
-              name: ecr
-              key: ECR_URL
+        image: {{.Values.ecr}}-redis:{{.Values.tag}}
         ports:
         - containerPort: 6379
       nodeSelector:

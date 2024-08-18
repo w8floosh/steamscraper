@@ -17,13 +17,8 @@ spec:
       - name: compute
         ports:
         - containerPort: 3001 
-        image: $(ECR_URL)-backend:latest
+        image: {{.Values.ecr}}-backend:{{.Values.tag}}
         env:
-        - name: ECR_URL
-          valueFrom: 
-            secretKeyRef:
-              name: ecr
-              key: ECR_URL
         - name: REDIS_HOST
           value: redis  
         - name: REDIS_PORT

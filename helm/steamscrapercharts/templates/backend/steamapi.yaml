@@ -18,13 +18,8 @@ spec:
       - name: steamapi
         ports:
         - containerPort: 443
-        image: $(ECR_URL)-steamapi:latest
+        image: {{.Values.ecr}}-steamapi:{{.Values.tag}}
         env:
-        - name: ECR_URL
-          valueFrom: 
-            secretKeyRef:
-              name: ecr
-              key: ECR_URL
         - name: REDIS_HOST
           value: redis
         - name: REDIS_PORT

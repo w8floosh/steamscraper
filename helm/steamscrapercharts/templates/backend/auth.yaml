@@ -15,13 +15,7 @@ spec:
     spec:
       containers:
       - name: auth
-        image: $(ECR_URL)-auth:latest
-        env:
-        - name: ECR_URL
-          valueFrom: 
-            secretKeyRef:
-              name: ecr
-              key: ECR_URL
+        image: {{.Values.ecr}}-auth:{{.Values.tag}}
         ports:
         - containerPort: 443
         volumeMounts:
