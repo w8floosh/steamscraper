@@ -15,7 +15,7 @@ spec:
       containers:
       - name: compute
         ports:
-        - containerPort: 3001 
+        - containerPort: 5000 
         image: {{.Values.ecr}}-backend:{{.Values.tag}}
         env:
         - name: REDIS_HOST

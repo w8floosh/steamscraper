@@ -16,7 +16,7 @@ spec:
       containers:
       - name: steamapi
         ports:
-        - containerPort: 8080
+        - containerPort: 443
         image: {{.Values.ecr}}-steamapi:{{.Values.tag}}
         env:
         - name: REDIS_HOST
@@ -63,7 +63,7 @@ spec:
   selector:
       steamscraper.io/name: steamapi
   ports:
-    - port: 80
-      targetPort: 8080
+    - port: 443
+      targetPort: 443
   type: LoadBalancer
   
