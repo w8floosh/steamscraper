@@ -19,15 +19,30 @@ spec:
         - containerPort: 443
         volumeMounts:
           - name: certs
-            mountPath: "/etc/ssl/certs"
+            mountPath: "/etc/ssl/certs/"
             readOnly: true
         resources:
           limits:
             cpu: "0.5"
-            memory: "512Mi"
+            memory: "384Mi"
           requests:
             cpu: "0.1"
-            memory: "256Mi"
+            memory: "128Mi"
+        env:
+        - name: NODE_ENV
+          value: "production"
+        - name: PORT
+          value: "4000"
+        - name: CORS_ORIGIN
+          value: "https://steamscraper.io"
+        - name: CERT_PATH
+          value: "/etc/ssl/certs/steamscraper.io.crt"
+        - name: CERTKEY_PATH
+          value: "/etc/ssl/certs/steamscraper.io.key"
+        - name: REDIS_HOST
+          value: "redis.default.svc.cluster.local"
+        - name: REDIS_PORT
+          value: "6379"
       nodeSelector:
         group: backend-group
 
@@ -35,6 +50,11 @@ spec:
       - name: certs
         secret:
           secretName: tls-cert
+          items: 
+            - key: tls.crt
+              path: steamscraper.io.crt
+            - key: tls.key
+              path: steamscraper.io.key
 ---
 apiVersion: v1
 kind: Service
@@ -45,4 +65,5 @@ spec:
     steamscraper.io/name: auth
   ports:
     - port: 443
+      targetPort: 443
   type: LoadBalancer 

@@ -5,12 +5,8 @@ import * as cookieParser from 'cookie-parser';
 
 async function bootstrap() {
   const httpsOptions = {
-    cert: readFileSync(
-      process.env.CERT_PATH || 'src/certificates/server_cert.crt',
-    ),
-    key: readFileSync(
-      process.env.CERTKEY_PATH || 'src/certificates/server_key.key',
-    ),
+    cert: readFileSync(process.env.CERT_PATH),
+    key: readFileSync(process.env.CERTKEY_PATH),
   };
   const app = await NestFactory.create(OAuthModule, { httpsOptions });
   if (process.env.NODE_ENV === 'production')

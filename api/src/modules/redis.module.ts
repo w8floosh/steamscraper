@@ -12,8 +12,8 @@ import { ClientsModule, Transport } from '@nestjs/microservices';
         name: 'REDIS_CLIENT',
         transport: Transport.REDIS,
         options: {
-          host: 'redis.default.svc.cluster.local',
-          port: 6379,
+          host: process.env.REDIS_HOST,
+          port: parseInt(process.env.REDIS_PORT),
         },
       },
     ]),

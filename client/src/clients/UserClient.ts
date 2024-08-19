@@ -13,8 +13,8 @@ import { storeToRefs } from 'pinia';
 import { PlayerSummaryResponse } from './responses';
 
 export default new (class UserClient {
-  private base_url = process.env.STEAMAPI_PROXY_URL + '/users';
-  private ach_url = process.env.STEAMAPI_PROXY_URL + '/stats/players';
+  private base_url = axios.defaults.baseURL + '/users';
+  private ach_url = axios.defaults.baseURL + '/stats/players';
   async getOwnedGames(
     userId: string,
     include_appinfo?: boolean,

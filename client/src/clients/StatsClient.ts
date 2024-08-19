@@ -9,7 +9,7 @@ import {
 } from './responses';
 
 export default new (class StatsClient {
-  private base_url = process.env.STEAMAPI_PROXY_URL + '/compute/stats/players';
+  private base_url = axios.defaults.baseURL + '/compute/stats/players';
 
   async getAchievementScore(
     userId: string

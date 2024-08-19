@@ -5,7 +5,7 @@ import { storeToRefs } from 'pinia';
 
 export default new (class LeaderboardsClient {
   private base_url =
-    process.env.STEAMAPI_PROXY_URL + '/compute/stats/leaderboards/friends';
+    axios.defaults.baseURL + '/compute/stats/leaderboards/friends';
 
   async getAchievementScoreFriendsLeaderboard(
     userId: string

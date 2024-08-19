@@ -14,7 +14,7 @@ function getRandomCodeVerifier() {
 }
 
 export const useAuthenticationService = () => {
-  const auth_url = process.env.AUTH_SERVER_URL || auth.defaults.baseURL;
+  const auth_url = auth.defaults.baseURL;
   const login = async (credentials: UserCredentials, redirect_uri: string) => {
     const state = getRandomCodeVerifier();
     const authCode = await auth.post(auth_url + '/login', credentials, {
