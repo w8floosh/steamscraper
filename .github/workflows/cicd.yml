@@ -1,5 +1,11 @@
 name: CI/CD pipeline
-on: workflow_dispatch
+on: 
+  workflow_dispatch:
+    inputs:
+      updateImages:
+        description: 'Update images'
+        type: boolean
+        default: true
 permissions:
   id-token: write # This is required for requesting the JWT
   contents: read  # This is required for actions/checkout
@@ -11,6 +17,7 @@ env:
   
 jobs:
   testing:
+    if: ${{ github.event.inputs.updateImages == true }}
     runs-on: ubuntu-latest
     steps:
       - name: Code checkout
@@ -30,6 +37,7 @@ jobs:
         run: npm run test
 
   build_publish:
+    if: ${{ github.event.inputs.updateImages == true }}
     needs: testing
     runs-on: ubuntu-latest
     steps:
@@ -99,8 +107,8 @@ jobs:
             
   
   deploy:
-    needs: build_publish
     runs-on: ubuntu-latest
+    needs: build_publish
     steps:
       - name: Code checkout
         uses: actions/checkout@v4  
