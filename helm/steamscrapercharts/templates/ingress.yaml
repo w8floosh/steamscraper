@@ -25,7 +25,7 @@ spec:
           service:
             name: webserver
             port:
-              number: 80
+              number: 443
       - path: /api/auth/
         pathType: Prefix
         backend:
