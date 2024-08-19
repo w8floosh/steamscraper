@@ -50,6 +50,6 @@ spec:
   selector:
     steamscraper.io/name: web-server
   ports:
-    - port: 443
+    - port: 80
       targetPort: 8080
   type: LoadBalancer # if you want your service to be accessible from outside the Kubernetes cluster
