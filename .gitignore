@@ -36,3 +36,5 @@ __pycache__
 # steamapi/steamapi/.vscode/launch.json
 # steamapi/steamapi/structures.json
 **/certificates
+*.local.sh
+helm/steamscrapercharts/kind-config.yaml

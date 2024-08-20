@@ -15,6 +15,7 @@ spec:
       containers:
       - name: web-server
         image: {{.Values.ecr}}-web:{{.Values.tag}}
+        imagePullPolicy: IfNotPresent
         volumeMounts:
         - name: certs
           mountPath: "/etc/ssl/certs"
@@ -41,6 +42,9 @@ spec:
       
       nodeSelector:
         group: frontend-group
+      
+      imagePullSecrets:
+        - name: regcred
 ---
 apiVersion: v1
 kind: Service
@@ -51,5 +55,5 @@ spec:
     steamscraper.io/name: web-server
   ports:
     - port: 443
-      targetPort: 443
+      targetPort: 8080
   type: LoadBalancer # if you want your service to be accessible from outside the Kubernetes cluster

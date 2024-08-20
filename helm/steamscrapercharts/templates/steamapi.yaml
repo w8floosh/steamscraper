@@ -15,12 +15,13 @@ spec:
     spec:
       containers:
       - name: steamapi
+        image: {{.Values.ecr}}-steamapi:{{.Values.tag}}
+        imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 443
-        image: {{.Values.ecr}}-steamapi:{{.Values.tag}}
         env:
         - name: REDIS_HOST
-          value: "redis.default.svc.cluster.local"
+          value: "redis"
         - name: REDIS_PORT
           value: "6379"
         - name: STEAMAPI_CG
@@ -53,6 +54,9 @@ spec:
 
       nodeSelector:
         group: backend-group
+
+      imagePullSecrets:
+        - name: regcred
 
 ---
 apiVersion: v1

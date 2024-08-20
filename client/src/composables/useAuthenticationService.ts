@@ -14,10 +14,9 @@ function getRandomCodeVerifier() {
 }
 
 export const useAuthenticationService = () => {
-  const auth_url = auth.defaults.baseURL;
   const login = async (credentials: UserCredentials, redirect_uri: string) => {
     const state = getRandomCodeVerifier();
-    const authCode = await auth.post(auth_url + '/login', credentials, {
+    const authCode = await auth.post('/login', credentials, {
       params: {
         response_type: 'code',
         client_id:
@@ -39,14 +38,14 @@ export const useAuthenticationService = () => {
   };
 
   const logout = async () => {
-    await auth.patch(auth_url + '/logout', null, {
+    await auth.patch('/logout', null, {
       withCredentials: true,
     });
   };
 
   const resume = async (): Promise<SessionResponse | null> => {
     const session = await auth.get<SessionCookieVerifierResponse>(
-      auth_url + '/verify',
+      '/verify',
       {
         withCredentials: true,
       }
@@ -59,7 +58,7 @@ export const useAuthenticationService = () => {
       };
 
     const refreshedTokens = await auth.post<TokenResponse>(
-      auth_url + '/oauth/token',
+      '/oauth/token',
       {
         grant_type: 'refresh_token',
         refresh_token: sessionData.token,
@@ -78,7 +77,7 @@ export const useAuthenticationService = () => {
   };
 
   const register = async (credentials: UserCredentials) => {
-    await auth.post(auth_url + '/signup', credentials);
+    await auth.post('/signup', credentials);
   };
 
   const issueTokens = async (
@@ -87,7 +86,7 @@ export const useAuthenticationService = () => {
     redirect_uri: string
   ) => {
     const response = await auth.post<TokenResponse>(
-      auth_url + '/oauth/token',
+      '/oauth/token',
       {
         grant_type: 'authorization_code',
         code: authCode,

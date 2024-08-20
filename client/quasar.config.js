@@ -12,8 +12,6 @@
 const { configure } = require('quasar/wrappers');
 
 const {
-  authServerURL,
-  steamAPIProxyURL,
   CORSOriginURL,
   quasarAppCertificatePath,
   quasarAppCertificateKeyPath,
@@ -37,7 +35,7 @@ module.exports = configure(function (/* ctx */) {
     // --> boot files are part of "main.js"
     // https://v2.quasar.dev/quasar-cli-vite/boot-files
     boot: [
-      
+
       'axios',
     ],
 
@@ -76,10 +74,6 @@ module.exports = configure(function (/* ctx */) {
 
       // publicPath: '/',
       // analyze: true,
-      env: {
-        AUTH_SERVER_URL: authServerURL,
-        STEAMAPI_PROXY_URL: steamAPIProxyURL,
-      },
       // rawDefine: {}
       // ignorePublicFolder: true,
       // minify: false,
@@ -89,7 +83,7 @@ module.exports = configure(function (/* ctx */) {
       // extendViteConf (viteConf) {},
       // viteVuePluginOptions: {},
 
-      
+
       // vitePlugins: [
       //   [ 'package-name', { ..options.. } ]
       // ]
@@ -102,7 +96,7 @@ module.exports = configure(function (/* ctx */) {
         cert: quasarAppCertificatePath,
         key: quasarAppCertificateKeyPath
       },
-      host: 'steamscraper',
+      host: 'localhost',
       // cors: false
       cors: CORSOriginURL? { origin: CORSOriginURL, credentials: true } : false
     },
