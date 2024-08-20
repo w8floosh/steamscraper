@@ -68,6 +68,5 @@ spec:
   selector:
     steamscraper.io/name: auth
   ports:
-    - port: 443
+    - port: 80
       targetPort: 443
-  type: LoadBalancer 

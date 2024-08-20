@@ -67,7 +67,6 @@ spec:
   selector:
       steamscraper.io/name: steamapi
   ports:
-    - port: 443
+    - port: 80
       targetPort: 443
-  type: LoadBalancer
   
