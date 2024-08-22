@@ -1,10 +1,9 @@
 apiVersion: apps/v1
-kind: StatefulSet
+kind: Deployment
 metadata:
-  name: steamapi-statefulset
+  name: steamapi-proxy-deployment
 spec:
   replicas: 1
-  serviceName: steamapi
   selector:
     matchLabels:
       steamscraper.io/name: steamapi
@@ -15,12 +14,13 @@ spec:
     spec:
       containers:
       - name: steamapi
-        ports:
-        - containerPort: 443
         image: {{.Values.ecr}}-steamapi:{{.Values.tag}}
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8001
         env:
         - name: REDIS_HOST
-          value: "redis.default.svc.cluster.local"
+          value: "redis"
         - name: REDIS_PORT
           value: "6379"
         - name: STEAMAPI_CG
@@ -54,6 +54,9 @@ spec:
       nodeSelector:
         group: backend-group
 
+      imagePullSecrets:
+        - name: regcred
+
 ---
 apiVersion: v1
 kind: Service
@@ -64,6 +67,24 @@ spec:
       steamscraper.io/name: steamapi
   ports:
     - port: 443
-      targetPort: 443
-  type: LoadBalancer
+      targetPort: 8001
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: api-steampowered
+spec:
+  type: ExternalName
+  externalName: api.steampowered.com
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: store-steampowered
+spec:
+  type: ExternalName
+  externalName: store.steampowered.com
+
   

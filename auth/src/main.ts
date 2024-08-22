@@ -2,6 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { OAuthModule } from './modules/oauth.module';
 import { readFileSync } from 'fs';
 import * as cookieParser from 'cookie-parser';
+import { ConfigService } from '@nestjs/config';
 
 async function bootstrap() {
   const httpsOptions = {
@@ -30,6 +31,8 @@ async function bootstrap() {
     });
   }
   app.use(cookieParser());
-  await app.listen(process.env.PORT || 4000);
+  const configService = app.get<ConfigService>(ConfigService);
+  const port = configService.get<number>('PORT') || 4000;
+  await app.listen(port);
 }
 bootstrap();

@@ -15,11 +15,12 @@ spec:
       containers:
       - name: compute
         ports:
-        - containerPort: 5000 
+          - containerPort: 5000 
         image: {{.Values.ecr}}-backend:{{.Values.tag}}
+        imagePullPolicy: Always
         env:
         - name: REDIS_HOST
-          value: "redis.default.svc.cluster.local"  
+          value: "redis"  
         - name: REDIS_PORT
           value: "6379"
         - name: BACKEND_CG
@@ -33,3 +34,5 @@ spec:
             memory: "128Mi"
       nodeSelector:
         group: backend-group
+      imagePullSecrets:
+        - name: regcred

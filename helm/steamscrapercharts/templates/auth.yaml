@@ -15,8 +15,9 @@ spec:
       containers:
       - name: auth
         image: {{.Values.ecr}}-auth:{{.Values.tag}}
+        imagePullPolicy: Always
         ports:
-        - containerPort: 443
+        - containerPort: 4000
         volumeMounts:
           - name: certs
             mountPath: "/etc/ssl/certs/"
@@ -40,11 +41,13 @@ spec:
         - name: CERTKEY_PATH
           value: "/etc/ssl/certs/steamscraper.io.key"
         - name: REDIS_HOST
-          value: "redis.default.svc.cluster.local"
+          value: "redis"
         - name: REDIS_PORT
           value: "6379"
       nodeSelector:
         group: backend-group
+      imagePullSecrets:
+        - name: regcred
 
       volumes:
       - name: certs
@@ -65,5 +68,4 @@ spec:
     steamscraper.io/name: auth
   ports:
     - port: 443
-      targetPort: 443
-  type: LoadBalancer 
+      targetPort: 4000

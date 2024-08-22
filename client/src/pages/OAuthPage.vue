@@ -8,11 +8,11 @@
             color="lime"
             class="q-ma-md"
         />
-        <MessagePopup error 
-            v-if="errorDialogOpened" 
-            :modelValue="errorDialogOpened" 
-            title="Authorization error" 
-            :message="errorDialogMessage" 
+        <MessagePopup error
+            v-if="errorDialogOpened"
+            :modelValue="errorDialogOpened"
+            title="Authorization error"
+            :message="errorDialogMessage"
             @confirm="closeDialog" />
     </q-page>
 </template>
@@ -26,7 +26,7 @@ import MessagePopup from 'src/components/dialogs/MessagePopup.vue';
 import { AxiosError } from 'axios';
 
 const { user, clientState, authCode, loading } = storeToRefs(useAuthStore());
-const { authorize } = useAuthStore(); 
+const { authorize } = useAuthStore();
 const router = useRouter()
 
 const errorDialogOpened = ref(false)
@@ -39,7 +39,7 @@ const closeDialog = () => {
 
 onMounted(async() => {
     try {
-        const tokens = await authorize(authCode.value, clientState.value, window.location.href);
+        const tokens = await authorize(authCode.value, clientState.value, `${window.location.href}`);
         clientState.value = '';
         authCode.value = '';
         user.value.accessToken = tokens.access_token;
