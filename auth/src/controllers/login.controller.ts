@@ -96,7 +96,7 @@ export class LoginController {
 
     // query URL must have the following params at this point: response_type, client_id, redirect_uri, scope, state, code_challenge, code_challenge_method
     const query = request.url.split('?')[1];
-    response.redirect(`/oauth/authorize?${query}`);
+    response.redirect(`oauth/authorize?${query}`);
   }
 
   @Get('/verify')

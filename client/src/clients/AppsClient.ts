@@ -12,15 +12,15 @@ import { useAuthStore } from 'src/stores/auth';
 import { storeToRefs } from 'pinia';
 
 export default new (class AppsClient {
-  private endpoint_apps = '/stats/apps/';
+  private endpoint_apps = '/stats/apps';
   private endpoint_store = '/store';
-  private endpoint_news = '/news/';
+  private endpoint_news = '/news';
 
   async getAppList(
     max_results?: number,
     last_appid?: string
   ): Promise<ISteamAPIResponse<AppListResponse>> {
-    const url = axios.defaults.baseURL + this.endpoint_store;
+    const url = this.endpoint_store;
     const params = {
       max_results,
       last_appid,
@@ -48,7 +48,7 @@ export default new (class AppsClient {
     count?: number,
     maxlength?: number
   ): Promise<ISteamAPIResponse<AppNewsResponse>> {
-    const url = axios.defaults.baseURL + this.endpoint_news + appid;
+    const url = `${this.endpoint_news}/${appid}`;
     const params = {
       count,
       maxlength,
@@ -77,11 +77,7 @@ export default new (class AppsClient {
     cc?: string,
     language?: string
   ): Promise<ISteamAPIResponse<AppDetailsResponse>> {
-    const url =
-      axios.defaults.baseURL +
-      this.endpoint_store +
-      '/details/' +
-      appid;
+    const url = `${this.endpoint_store}/details/${appid}`;
     const params = {
       filters,
       cc,
@@ -108,11 +104,7 @@ export default new (class AppsClient {
   async getAppGlobalAchievementPercentages(
     gameid: number
   ): Promise<ISteamAPIResponse<AppGlobalAchievementPercentagesResponse>> {
-    const url =
-      axios.defaults.baseURL +
-      this.endpoint_apps +
-      gameid +
-      '/achievements';
+    const url = `${this.endpoint_apps}/${gameid}/achievements`;
     const params = {
       key: storeToRefs(useAuthStore()).steamWebAPIToken.value,
     };
@@ -135,8 +127,7 @@ export default new (class AppsClient {
   async getCurrentPlayers(
     appid: number
   ): Promise<ISteamAPIResponse<NoCurrentPlayersResponse>> {
-    const url =
-      axios.defaults.baseURL + this.endpoint_apps + appid + '/current';
+    const url = `${this.endpoint_apps}/${appid}/current`;
     const params = {
       key: storeToRefs(useAuthStore()).steamWebAPIToken.value,
     };

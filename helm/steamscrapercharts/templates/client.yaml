@@ -15,7 +15,7 @@ spec:
       containers:
       - name: web-server
         image: {{.Values.ecr}}-web:{{.Values.tag}}
-        imagePullPolicy: IfNotPresent
+        imagePullPolicy: Always
         volumeMounts:
         - name: certs
           mountPath: "/etc/ssl/certs"

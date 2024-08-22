@@ -4,8 +4,7 @@ import { useAuthStore } from 'src/stores/auth';
 import { storeToRefs } from 'pinia';
 
 export default new (class LeaderboardsClient {
-  private base_url =
-    axios.defaults.baseURL + '/compute/stats/leaderboards/friends';
+  private base_url = '/compute/stats/leaderboards/friends';
 
   async getAchievementScoreFriendsLeaderboard(
     userId: string

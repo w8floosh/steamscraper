@@ -13,8 +13,8 @@ import { storeToRefs } from 'pinia';
 import { PlayerSummaryResponse } from './responses';
 
 export default new (class UserClient {
-  private base_url = axios.defaults.baseURL + '/users';
-  private ach_url = axios.defaults.baseURL + '/stats/players';
+  private base_url = '/users';
+  private ach_url = '/stats/players';
   async getOwnedGames(
     userId: string,
     include_appinfo?: boolean,
@@ -35,7 +35,6 @@ export default new (class UserClient {
         { params }
       );
       if (response.data.errors.length) {
-        console.error('AH CUNNUTU CA SI', userId);
         throw new SteamAPIError(response.data.errors.join('\n'));
       }
       return response.data;

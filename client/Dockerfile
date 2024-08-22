@@ -10,4 +10,4 @@ RUN npm run build
 
 RUN npm install -g http-server
 EXPOSE 8080
-CMD ["http-server", "dist/spa", "-p", "8080"]
+CMD ["http-server", "dist/spa", "-p", "8080", "-S", "-C", "/etc/ssl/certs/steamscraper.io.crt", "-K", "/etc/ssl/certs/steamscraper.io.key"]

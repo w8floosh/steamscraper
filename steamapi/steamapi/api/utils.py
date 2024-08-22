@@ -71,7 +71,7 @@ async def set_payload_from_requests(
 
 def build_url(interface: APIType, call: str, version="0002", key="", *route, **kwargs):
     if any(interface.name is x for x in SteamStoreAPI.__members__):
-        url = f"https://store.steampowered.com/{interface.value}/{call}{_extract_query(None, *route, **kwargs)}"
+        url = f"https://store-steampowered/{interface.value}/{call}{_extract_query(None, *route, **kwargs)}"
     else:
-        url = f"http://api.steampowered.com/{interface.value}/{call}/v{version}{_extract_query(key, **kwargs)}"
+        url = f"http://api-steampowered/{interface.value}/{call}/v{version}{_extract_query(key, **kwargs)}"
     return url

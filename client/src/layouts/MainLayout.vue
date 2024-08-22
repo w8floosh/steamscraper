@@ -17,7 +17,7 @@
             style="background-color: transparent"
             dark
           >
-          
+
             <q-avatar dense color="black">
               {{ user.username[0].toUpperCase() }}
             </q-avatar>
@@ -31,7 +31,6 @@
           </q-btn-group>
       </q-toolbar>
       <q-toolbar inset>
-        {{ auth }}
         <q-breadcrumbs>
           <q-breadcrumbs-el v-for="page in breadcrumbs" :key="page.name" :label="page.name" :icon="page.icon" separator/>
         </q-breadcrumbs>
@@ -55,19 +54,19 @@
         @confirm="sendCredentials"
         @update:model-value="credentialsDialogOpened = false"
       />
-      <MessagePopup 
-        v-if='messagePopupOpened' 
-        :modelValue="messagePopupOpened" 
-        :title="messagePopupTitle" 
+      <MessagePopup
+        v-if='messagePopupOpened'
+        :modelValue="messagePopupOpened"
+        :title="messagePopupTitle"
         :message="messagePopupContent"
         @confirm="messagePopupOpened = false"
       />
-      <MessagePopup 
-        v-if="errorDialogOpened" 
+      <MessagePopup
+        v-if="errorDialogOpened"
         error
-        :modelValue="errorDialogOpened" 
-        title="Error" 
-        :message="errorDialogMessage" 
+        :modelValue="errorDialogOpened"
+        title="Error"
+        :message="errorDialogMessage"
         @confirm="errorDialogOpened = false; $router.push('/')"/>
     </q-page-container>
   </q-layout>
@@ -84,6 +83,7 @@ import { storeToRefs } from 'pinia';
 import { IBreadcrumbs } from 'src/components/models';
 import { useDrawerOptions } from 'src/composables/useDrawerOptions'
 import { RouteLocation, onBeforeRouteLeave, useRoute, useRouter } from 'vue-router';
+import { auth as api } from 'src/boot/axios';
 
 onBeforeRouteLeave((to) => {
   addBreadcrumbs(to)
@@ -104,7 +104,7 @@ const props = withDefaults(defineProps<{ auth?: boolean }>(), {
 
 const credentialsDialogOpened = ref(props.auth);
 const messagePopupOpened = ref(false);
-const dialogMode = ref<'login' | 'register'>('login'); 
+const dialogMode = ref<'login' | 'register'>('login');
 const avatarText = ref('');
 const errorDialogOpened = ref(false);
 const errorDialogMessage = ref('')
@@ -121,9 +121,11 @@ const signIn = async (credentials: UserCredentials) => {
   if (!loading.value) {
     const routePath = router.resolve(route.fullPath).href
     let absoluteURL = new URL(routePath, window.location.origin).href
-    if (absoluteURL.endsWith('/auth')) absoluteURL = absoluteURL.replace('/auth', '/')
+    if (absoluteURL.endsWith('/auth')) absoluteURL = absoluteURL.replace('/auth', '')
+    else if (absoluteURL.endsWith('/')) absoluteURL = absoluteURL.replace('/', '')
+
     try {
-      await authenticate(credentials, absoluteURL.concat('oauth/redirect'));
+      await authenticate(credentials, absoluteURL.concat('/oauth/redirect'));
       avatarText.value = user.value.username[0];
       router.push('/oauth/redirect')
     }
@@ -168,7 +170,7 @@ const signOut = async () => {
 /* add breadcrumbs data (name and icon) to the breadcrumbs array,
 if the route is a page listed in drawerOptions, delete all breadcrumbs and add the one relative to the page
 else add the page to the breadcrumbs array
-also, if the route is already in the breadcrumbs array, remove all the elements after it  
+also, if the route is already in the breadcrumbs array, remove all the elements after it
 */
 function addBreadcrumbs(to: RouteLocation) {
   if (to.name) {

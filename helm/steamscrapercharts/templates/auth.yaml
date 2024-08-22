@@ -15,9 +15,9 @@ spec:
       containers:
       - name: auth
         image: {{.Values.ecr}}-auth:{{.Values.tag}}
-        imagePullPolicy: IfNotPresent
+        imagePullPolicy: Always
         ports:
-        - containerPort: 443
+        - containerPort: 4000
         volumeMounts:
           - name: certs
             mountPath: "/etc/ssl/certs/"
@@ -48,7 +48,6 @@ spec:
         group: backend-group
       imagePullSecrets:
         - name: regcred
-      imagePullPolicy: IfNotPresent
 
       volumes:
       - name: certs
@@ -68,5 +67,5 @@ spec:
   selector:
     steamscraper.io/name: auth
   ports:
-    - port: 80
-      targetPort: 443
+    - port: 443
+      targetPort: 4000

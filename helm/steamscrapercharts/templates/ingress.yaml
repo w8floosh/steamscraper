@@ -3,12 +3,12 @@ kind: Ingress
 metadata:
   name: main-ingress
   annotations: 
-    # nginx.org/rewrites: "serviceName=webserver rewrite=/; serviceName=auth rewrite=/; serviceName=steamapi rewrite=/"
     nginx.ingress.kubernetes.io/use-regex: "true"
     nginx.ingress.kubernetes.io/rewrite-target: "/$1"
     nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
     nginx.ingress.kubernetes.io/ssl-redirect: "true"
-    # nginx.ingress.kubernetes.io/proxy-buffer-size: "512k"
+    nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+    nginx.ingress.kubernetes.io/default-backend: "webserver"
 spec:
   ingressClassName: nginx
   tls:
@@ -19,24 +19,24 @@ spec:
   - host: steamscraper.io
     http:
       paths:
-      - path: /
+      - path: /(.*)
         pathType: Prefix
         backend:
           service:
             name: webserver
             port:
-              number: 80
+              number: 80      
       - path: /api/auth/(.*)
         pathType: Prefix
         backend:
           service:
             name: auth
             port:
-              number: 80
+              number: 443
       - path: /api/steam/(.*)
         pathType: Prefix
         backend:
           service:
             name: steamapi
             port:
-              number: 80
+              number: 443
