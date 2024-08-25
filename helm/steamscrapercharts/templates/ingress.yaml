@@ -9,6 +9,7 @@ metadata:
     nginx.ingress.kubernetes.io/ssl-redirect: "true"
     nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
     nginx.ingress.kubernetes.io/default-backend: "webserver"
+
 spec:
   ingressClassName: nginx
   tls:
@@ -16,8 +17,7 @@ spec:
     - steamscraper.io
     secretName: tls-cert
   rules:
-  - host: steamscraper.io
-    http:
+  - http:
       paths:
       - path: /(.*)
         pathType: Prefix

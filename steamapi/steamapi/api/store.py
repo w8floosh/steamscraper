@@ -1,4 +1,5 @@
 import dataclasses
+from sys import stderr
 from quart import Blueprint, request
 from httpx import AsyncClient, Timeout
 
@@ -11,7 +12,7 @@ from ..api.utils import build_url, clean_obj, prepare_response
 api = Blueprint("store", __name__, url_prefix="/store")
 
 
-@api.route("/", methods=["GET"])
+@api.route("", methods=["GET"])
 # @cached(RedisCacheKeyPattern.APP_LIST, ttl=RedisCacheTTL.FOREVER)
 async def get_app_list(**kwargs):
     injected_client = kwargs.get("session")
