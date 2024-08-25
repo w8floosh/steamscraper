@@ -64,27 +64,7 @@ metadata:
   name: steamapi
 spec:
   selector:
-      steamscraper.io/name: steamapi
+    steamscraper.io/name: steamapi
   ports:
     - port: 443
       targetPort: 8001
-
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: api-steampowered
-spec:
-  type: ExternalName
-  externalName: api.steampowered.com
-
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: store-steampowered
-spec:
-  type: ExternalName
-  externalName: store.steampowered.com
-
-  

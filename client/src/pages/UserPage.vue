@@ -6,7 +6,7 @@
             <div v-if="steamWebAPIToken" class="user-metadata-token text-grey-5">Steam Web API token: {{ steamWebAPIToken }}</div>
         </q-card-section>
         <q-card-section class="user-content">
-            {{ externalUser?.username }} 
+            {{ externalUser?.username }}
             {{ userId }}
             <q-tabs
             v-model="tab"
@@ -22,7 +22,7 @@
                 <q-tab name="favorites" label="Favorites" />
             </q-tabs>
             <q-tab-panels v-model="tab" animated class="bg-primary text-white">
-                
+
                 <q-tab-panel name="friends">
                     <PlayerCardList v-if="userData.friends?.length" :players="userData.friends"/>
                     <q-spinner-dots v-else-if="loading" color="white" size="40px" />
@@ -67,19 +67,18 @@
                         </template>
                     </q-splitter>
                 </q-tab-panel>
-                
+
                 <q-tab-panel name="achievements">
-                    {{ userData.achievements?.length }}
-                    <q-infinite-scroll ref="scrollTargetRef" v-if="userData.games?.length" 
-                        class="achievements-infscr" 
-                        :disable="!userData.games?.length" 
-                        @load="loadAchievements" 
+                    <q-infinite-scroll ref="scrollTargetRef" v-if="userData.games?.length"
+                        class="achievements-infscr"
+                        :disable="!userData.games?.length"
+                        @load="loadAchievements"
                         :scroll-target="scrollTargetRef"
                     >
                         <div v-for="(item, index) in userData.achievements" :key="item.apiName || index">
                             <AchievementCard
                                 :appName="item.appName"
-                                :name="item.name" 
+                                :name="item.name"
                                 :unlockedAt="item.unlockTime"
                             />
                         </div>
@@ -112,14 +111,14 @@
                         <template v-slot:after>
                             <q-tab-panels v-model="favoritesTab" animated class="bg-primary text-white">
                                 <q-tab-panel name="genres" class="user-library-inner-content">
-                                    <GenreCategoryInfoCardList v-if="userData.favorite.genres?.length" 
+                                    <GenreCategoryInfoCardList v-if="userData.favorite.genres?.length"
                                         :data="userData.favorite.genres"
                                         sort="desc"/>
                                     <q-spinner-dots v-else-if="loading" color="white" size="40px" />
                                     <div v-else>No favorite genres found</div>
                                 </q-tab-panel>
                                 <q-tab-panel name="categories" class="user-library-inner-content">
-                                    <GenreCategoryInfoCardList v-if="userData.favorite.categories?.length" 
+                                    <GenreCategoryInfoCardList v-if="userData.favorite.categories?.length"
                                         :data="userData.favorite.categories"
                                         sort="desc"/>
                                     <q-spinner-dots v-else-if="loading" color="white" size="40px" />
@@ -163,7 +162,7 @@ const EMPTY_USERDATA: UserData = {
         genres: undefined,
         categories: undefined
     }
-} 
+}
 const LOADING_USER: Partial<IUser> = {
     username: '...',
     avatarURL: '',

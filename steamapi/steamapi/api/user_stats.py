@@ -24,7 +24,7 @@ from ..api.utils import (
 api = Blueprint("playerstats", __name__, url_prefix="/compute/stats/players")
 
 
-@api.route("<userid>/gamerscore", methods=["GET"])
+@api.route("/<userid>/gamerscore", methods=["GET"])
 @broker.ping()
 async def get_achievement_score(userid, **kwargs):
     async def set_callback(message: RedisMessage, requests):
@@ -114,7 +114,7 @@ async def get_achievement_score_from_userid_list(userids, **kwargs):
     )
 
 
-@api.route("<userid>/favorite", methods=["GET"])
+@api.route("/<userid>/favorite", methods=["GET"])
 @broker.ping()
 async def get_user_favorite_genres_categories(userid):
     async def set_callback(message: RedisMessage, requests, owned: dict):
@@ -177,7 +177,7 @@ async def get_user_favorite_genres_categories(userid):
         return dataclasses.asdict(response)
 
 
-@api.route("<userid>/forgotten", methods=["GET"])
+@api.route("/<userid>/forgotten", methods=["GET"])
 @broker.ping()
 async def get_user_forgotten_games(userid):
     message = RedisMessage(RedisMessageType.USER_FORGOTTEN_GAMES.value, userid)
